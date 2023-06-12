@@ -2,7 +2,7 @@
 ## .config
 - bin:
   - *ethernet_status.sh*: retrieves local IP address.
-  - *hackthebox_status.sh*: retrieves HTB IP address when connected on VPN.
+  - *vpn_status.sh*: retrieves HTB IP address when connected on VPN.
   - *target_to_hack.sh*: sets the target machine IP address.
   - *target*: stores the target machine IP and name.
   - *whichSystem.py*: gets the OS from target machine IP based on TTL value.
@@ -18,7 +18,7 @@
 ### Ventanas
 `Windows + q` : Cerrar ventana
 
-`Windows + s` : Pseudo-Tiling window
+`Windows + s` : Pseudo-Tiling window (ventana flotante)
 
 `Windows + t` : pasar de tiling window a ventana completa
 
@@ -55,6 +55,8 @@
 `Windows + Shift + f` : abrir firefox
 
 `Windows + Shift + x` : bloquear con i3lock-fancy
+
+`Windows + Shift + s` : captura de pantalla con flameshot
 
 `Windows + Shift + q` : cerrar sesión y salir a la pantalla de bloqueo
 

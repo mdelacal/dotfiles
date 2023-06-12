@@ -5,14 +5,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Greeting
-#echo "Welcome to Parrot OS"
-
 # Prompt
 PROMPT="%F{red}┌[%f%F{cyan}%m%f%F{red}]─[%f%F{yellow}%D{%H:%M-%d/%m}%f%F{red}]─[%f%F{magenta}%d%f%F{red}]%f"$'\n'"%F{red}└╼%f%F{green}$USER%f%F{yellow}$%f"
-# Export PATH$
-export PATH=~/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:/opt/nvim-linux64/bin:/opt/i3lock-fancy:$PATH
 
+# Export $PATH
+export PATH=~/.local/bin:/snap/bin:/usr/sandbox/:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/usr/share/games:/usr/local/sbin:/usr/sbin:/sbin:/opt/nvim-linux64/bin:/opt/i3lock-fancy:$PATH
 
 function hex-encode()
 {
@@ -29,63 +26,22 @@ function rot13()
   echo "$@" | tr 'A-Za-z' 'N-ZA-Mn-za-m'
 }
 
-function settarget(){
-  ip_address=$1
-  machine_name=$2
-
-  echo "$ip_address $machine_name" > /home/apolo/.config/bin/target
-}
-
-function cleartarget(){
-	echo '' > /home/apolo/.config/bin/target
-}
-
-# Colours
-greenColour="\e[0;32m\033[1m"
-endColour="\033[0m\e[0m"
-redColour="\e[0;31m\033[1m"
-blueColour="\e[0;34m\033[1m"
-yellowColour="\e[0;33m\033[1m"
-purpleColour="\e[0;35m\033[1m"
-turquoiseColour="\e[0;36m\033[1m"
-grayColour="\e[0;37m\033[1m"
-
-function extractPorts(){
-
-	echo -e "\n${yellowColour}[*] Extracting information...${endColour}\n"
-	ip_address=$(cat allPorts | grep -oP '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' | sort -u)
-	open_ports=$(cat allPorts | grep -oP '\d{1,5}/open' | awk '{print $1}' FS="/" | xargs | tr ' ' ds ',')
-
-	echo -e "\t${blueColour}[*] IP Address: ${endColour}${grayColour}$ip_address${endColour}"
-	echo -e "\t${blueColour}[*] Open ports: ${endColour}${grayColour}$open_ports${endColour}\n"
-
-	echo $open_ports | tr -d '\n' | xclip -sel clip
-
-	echo -e "${yellowColour}[*] Ports have been copied to clipboard!${endColour}\n"
-
-}
-
-function mkt(){
-	mkdir {nmap,content,scripts,tmp,exploits}
-}
-
-function whichSystem(){
-	ip_address=$1
-	python3 /home/apolo/.config/bin/whichSystem.py $ip_address
-}
-
 # alias
-# alias ls='ls -lh --color=auto'
+alias ls='ls -lh --color=auto'
 alias dir='dir --color=auto'
 alias vdir='vdir --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# Custom aliases
+# Custom Aliases
+# -----------------------------------------------
+# bat
 alias cat='bat'
-alias catn='/bin/cat'
-alias catnp='bat --no-paging'
+alias catn='bat --style=plain'
+alias catnp='bat --style=plain --paging=never'
+
+# ls
 alias ll='lsd -lh --group-dirs=first'
 alias la='lsd -a --group-dirs=first'
 alias l='lsd --group-dirs=first'
@@ -111,41 +67,19 @@ if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 fi
 
 # Sudo plugin
-source /usr/share/zsh-sudo/sudo.plugin.zsh
-
-if [ -f /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]; then
-#  source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-  # Select all suggestion instead of top on result only
-  zstyle ':autocomplete:tab:*' insert-unambiguous yes
-  zstyle ':autocomplete:tab:*' widget-style menu-select
-  zstyle ':autocomplete:*' min-input 2
-  bindkey $key[Up] up-line-or-history
-  bindkey $key[Down] down-line-or-history
+if [ -f /usr/share/zsh-sudo/sudo.plugin.zsh ]; then
+  source /usr/share/zsh-sudo/sudo.plugin.zsh
 fi
 
-# Save type history for completion and easier life
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
-# setopt appendhistory
-setopt histignorealldups sharehistory
-
-# Useful alias for benchmarking programs
-# require install package "time" sudo apt install time
-# alias time="/usr/bin/time -f '\t%E real,\t%U user,\t%S sys,\t%K amem,\t%M mmem'"
-# Display last command interminal
-echo -en "\e]2;Parrot Terminal\a"
-preexec () { print -Pn "\e]0;$1 - Parrot Terminal\a" }
-source /home/apolo/powerlevel10k/powerlevel10k.zsh-theme
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey "^[[3~" delete-char
-bindkey "^[[1;3C" forward-word
-bindkey "^[[1;3D" backward-word
+# if [ -f /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]; then
+#  source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+  # Select all suggestion instead of top on result only
+#  zstyle ':autocomplete:tab:*' insert-unambiguous yes
+#  zstyle ':autocomplete:tab:*' widget-style menu-select
+#  zstyle ':autocomplete:*' min-input 2
+#  bindkey $key[Up] up-line-or-history
+#  bindkey $key[Down] down-line-or-history
+# fi
 
 # Use modern completion system
 autoload -Uz compinit
@@ -169,4 +103,79 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# Save type history for completion and easier life
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+setopt histignorealldups sharehistory
+
+# Useful alias for benchmarking programs
+# require install package "time" sudo apt install time
+# alias time="/usr/bin/time -f '\t%E real,\t%U user,\t%S sys,\t%K amem,\t%M mmem'"
+# Display last command interminal
+echo -en "\e]2;Parrot Terminal\a"
+preexec () { print -Pn "\e]0;$1 - Parrot Terminal\a" }
+source /home/miguel/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Fix the Java Problem in BurpSuite
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# Quitar bold de las letras
+export LS_COLORS="rs=0:di=34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:"
+
+# Key bindings
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[[3~" delete-char
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+
+# Colours
+greenColour="\e[0;32m\033[1m"
+endColour="\033[0m\e[0m"
+redColour="\e[0;31m\033[1m"
+blueColour="\e[0;34m\033[1m"
+yellowColour="\e[0;33m\033[1m"
+purpleColour="\e[0;35m\033[1m"
+turquoiseColour="\e[0;36m\033[1m"
+grayColour="\e[0;37m\033[1m"
+
+# Funciones
+function settarget(){
+  ip_address=$1
+  machine_name=$2
+  echo "$ip_address $machine_name" > /home/miguel/.config/bin/target
+}
+
+function cleartarget(){
+  echo '' > /home/miguel/.config/bin/target
+}
+
+function extractPorts(){
+
+  echo -e "\n${yellowColour}[*] Extracting information...${endColour}\n"
+  ip_address=$(cat allPorts | grep -oP '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}' | sort -u)
+  open_ports=$(cat allPorts | grep -oP '\d{1,5}/open' | awk '{print $1}' FS="/" | xargs | tr ' ' ds ',')
+
+  echo -e "\t${blueColour}[*] IP Address: ${endColour}${grayColour}$ip_address${endColour}"
+  echo -e "\t${blueColour}[*] Open ports: ${endColour}${grayColour}$open_ports${endColour}\n"
+
+  echo $open_ports | tr -d '\n' | xclip -sel clip
+
+  echo -e "${yellowColour}[*] Ports have been copied to clipboard!${endColour}\n"
+
+}
+
+function mkt(){
+  mkdir {nmap,content,scripts,tmp,exploits}
+}
+
+function whichSystem(){
+  ip_address=$1
+  python3 /home/miguel/.config/bin/whichSystem.py $ip_address
+}
