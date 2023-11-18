@@ -1,5 +1,8 @@
 #! /bin/sh
 
+wmname LG3D &
+vmware-user-suid-wrapper &
+
 pgrep -x sxhkd > /dev/null || sxhkd &
 
 bspc monitor -d I II III IV V VI VII VIII IX X
@@ -19,6 +22,5 @@ bspc rule -a Screenkey manage=off
 
 feh --bg-fill /home/miguel/Desktop/miguel/Fondos/fondo.png &
 ~/.config/polybar/./launch.sh &
-wmname LG3D &
 picom &
 bspc config border_width 0
